@@ -2,7 +2,7 @@
 
 int	parse_element(char *line, t_game *game)
 {
-	if (line[0] == '\n' || line[0] == '\0')
+	if (is_blank_line(line))
 		return (0);
 	if (ft_strncmp(line, "NO", 2) == 0)
 		return (parse_texture(line, game, 0));

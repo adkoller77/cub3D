@@ -49,28 +49,51 @@ static int	pad_map(t_game *game)
 	return (0);
 }
 
+static int	add_map_line(t_game *game, char *line)
+{
+	char	**arr;
+	char	*nl;
+	int		i;
+
+	nl = ft_strchr(line, '\n');
+	if (nl)
+		*nl = '\0';
+	arr = malloc(sizeof(char *) * (game->map.size + 1));
+	if (arr == NULL)
+		return (-1);
+	i = 0;
+	while (i < game->map.size)
+	{
+		arr[i] = game->map.grid[i];
+		i++;
+	}
+	arr[i] = line;
+	free(game->map.grid);
+	game->map.grid = arr;
+	game->map.size++;
+	return (0);
+}
+
 int	parse_map(int fd, t_game *game, char *line)
 {
-	int		i;
-	char	*modif_line;
-	char	**tmp;
+	int	map_ended;
 
-	i = 0;
-	while (line && line[0] != '\0' && line[0] != '\n')
+	map_ended = 0;
+	while (line)
 	{
-		modif_line = ft_strchr(line, '\n');
-		if (modif_line)
-			*modif_line = '\0';
-		tmp = realloc(game->map.grid, sizeof(char *) * (i + 1));
-		if (tmp == NULL)
-			return (free(line), print_error("Memory allocation failed"));
-		game->map.grid = tmp;
-		game->map.grid[i] = line;
-		i++;
+		if (is_blank_line(line))
+			map_ended = 1;
+		else if (map_ended)
+			return (free(line), close(fd), print_error("Content after map"));
+		else if (add_map_line(game, line) == -1)
+			return (free(line), close(fd), print_error("Malloc failed"));
+		else
+			line = NULL;
+		free(line);
 		line = get_next_line(fd);
 	}
-	free(line);
-	game->map.size = i;
 	close(fd);
+	if (check_elements(game) == -1)
+		return (-1);
 	return (pad_map(game));
 }

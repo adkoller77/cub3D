@@ -117,6 +117,7 @@ void	dir_player(t_game *game);
 int		pos_player(t_game *game, int i, int j, char c);
 int		check_chars_map(t_game *game);
 int		check_elements(t_game *game);
+int		is_blank_line(char *line);
 void	put_pixel(t_game *game, int x, int y, int color);
 int		parse_element(char *line, t_game *game);
 int		parse_map(int fd, t_game *game, char *line);
