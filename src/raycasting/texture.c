@@ -6,7 +6,7 @@
 /*   By: adnajja <adnajja@student.42belgium.be>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/01 16:40:40 by adnajja           #+#    #+#             */
-/*   Updated: 2026/09/01 16:40:43 by adnajja          ###   ########.fr       */
+/*   Updated: 2026/09/01 17:16:45 by adnajja          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,7 @@ static t_texture	*pick_texture(t_game *game, t_ray *ray)
 		wall_x = game->player.pos_y + ray->wall_dist * ray->ray_dir_y;
 	else
 		wall_x = game->player.pos_x + ray->wall_dist * ray->ray_dir_x;
-	wall_x -= floor(wall_x);
-	ray->tex_x = (int)(wall_x * tex->width);
+	ray->tex_x = (int)((wall_x -= floor(wall_x)) * tex->width);
 	if (ray->side == 0 && ray->ray_dir_x > 0)
 		ray->tex_x = tex->width - ray->tex_x - 1;
 	if (ray->side == 1 && ray->ray_dir_y < 0)
