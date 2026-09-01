@@ -53,21 +53,21 @@ void	move_player(t_game *game, char dir)
 	double	new_y;
 	double	dx;
 	double	dy;
-	double	margin_x;
-	double	margin_y;
 
 	get_move_delta(game, dir, &dx, &dy);
 	new_x = game->player.pos_x + dx;
 	new_y = game->player.pos_y + dy;
-	margin_x = -COLLISION_MARGIN;
-	if (dx > 0)
-		margin_x = COLLISION_MARGIN;
-	margin_y = -COLLISION_MARGIN;
-	if (dy > 0)
-		margin_y = COLLISION_MARGIN;
-	if (!is_wall(game, new_x + margin_x, game->player.pos_y))
+	if (dx <= 0)
+		dx = -COLLISION_MARGIN;
+	else
+		dx = COLLISION_MARGIN;
+	if (dy <= 0)
+		dy = -COLLISION_MARGIN;
+	else
+		dy = COLLISION_MARGIN;
+	if (!is_wall(game, new_x + dx, game->player.pos_y))
 		game->player.pos_x = new_x;
-	if (!is_wall(game, game->player.pos_x, new_y + margin_y))
+	if (!is_wall(game, game->player.pos_x, new_y + dy))
 		game->player.pos_y = new_y;
 }
 
