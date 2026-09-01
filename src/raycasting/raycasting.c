@@ -51,6 +51,8 @@ void	init_ray(t_ray *ray, t_game *game, int i)
 
 static void	set_bounds(t_ray *ray)
 {
+	if (ray->wall_dist < 0.05)
+		ray->wall_dist = 0.05;
 	ray->line_height = (int)(HEIGHT / ray->wall_dist);
 	ray->draw_start = (HEIGHT - ray->line_height) / 2;
 	ray->draw_end = (HEIGHT + ray->line_height) / 2;

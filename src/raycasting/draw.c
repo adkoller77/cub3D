@@ -16,6 +16,8 @@ void	put_pixel(t_game *game, int x, int y, int color)
 {
 	char	*dst;
 
+	if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT)
+		return ;
 	dst = game->mlx.addr + (y * game->mlx.line_len
 			+ x * (game->mlx.bpp / 8));
 	*(unsigned int *)dst = color;

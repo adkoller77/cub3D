@@ -6,14 +6,15 @@
 /*   By: adnajja <adnajja@student.42belgium.be>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 23:00:08 by adnajja           #+#    #+#             */
-/*   Updated: 2026/08/25 18:08:27 by adnajja          ###   ########.fr       */
+/*   Updated: 2026/08/26 13:30:09 by adnajja          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
 #define SPEED 0.03
-#define ROT_SPEED 0.03
+#define ROT_SPEED 0.02
+#define COLLISION_MARGIN 0.2
 
 static int	is_wall(t_game *game, double x, double y)
 {
@@ -56,9 +57,11 @@ void	move_player(t_game *game, char dir)
 	get_move_delta(game, dir, &dx, &dy);
 	new_x = game->player.pos_x + dx;
 	new_y = game->player.pos_y + dy;
-	if (!is_wall(game, new_x, game->player.pos_y))
+	if (!is_wall(game, new_x + (dx > 0 ? COLLISION_MARGIN : -COLLISION_MARGIN),
+			game->player.pos_y))
 		game->player.pos_x = new_x;
-	if (!is_wall(game, game->player.pos_x, new_y))
+	if (!is_wall(game, game->player.pos_x,
+			new_y + (dy > 0 ? COLLISION_MARGIN : -COLLISION_MARGIN)))
 		game->player.pos_y = new_y;
 }
 

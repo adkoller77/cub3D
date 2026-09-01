@@ -36,6 +36,10 @@ static t_texture	*pick_texture(t_game *game, t_ray *ray)
 		ray->tex_x = tex->width - ray->tex_x - 1;
 	if (ray->side == 1 && ray->ray_dir_y < 0)
 		ray->tex_x = tex->width - ray->tex_x - 1;
+	if (ray->tex_x < 0)
+		ray->tex_x = 0;
+	if (ray->tex_x >= tex->width)
+		ray->tex_x = tex->width - 1;
 	return (tex);
 }
 
