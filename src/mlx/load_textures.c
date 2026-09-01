@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   load_textures.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adnajja <adnajja@student.42belgium.be>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/09/01 16:40:40 by adnajja           #+#    #+#             */
+/*   Updated: 2026/09/01 16:40:43 by adnajja          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 int	load_textures(t_game *game)
@@ -33,6 +45,7 @@ void	free_textures(t_game *game)
 	{
 		if (game->mlx.tex[i].img)
 			mlx_destroy_image(game->mlx.mlx, game->mlx.tex[i].img);
+		game->mlx.tex[i].img = NULL;
 		i++;
 	}
 }

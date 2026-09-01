@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adnajja <adnajja@student.42belgium.be>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/09/01 16:40:40 by adnajja           #+#    #+#             */
+/*   Updated: 2026/09/01 16:40:43 by adnajja          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 #include <fcntl.h>
 #include <X11/X.h>
@@ -21,11 +33,15 @@ void	free_game(t_game *game)
 
 	i = 0;
 	free_textures(game);
+	free_mlx(game);
 	free_map(game->map.grid, game->map.size);
 	while (i < 4)
 	{
 		if (game->map.texture_path[i])
+		{
 			free(game->map.texture_path[i]);
+			game->map.texture_path[i] = NULL;
+		}
 		i++;
 	}
 }
@@ -69,7 +85,7 @@ int	main(int ac, char **av)
 		return (1);
 	init_game(&game);
 	if (read_cub(fd, &game) == -1)
-		return (close(fd), free_game(&game), 1);
+		return (free_game(&game), 1);
 	if (validate_map(&game) == -1)
 		return (free_game(&game), 1);
 	dir_player(&game);

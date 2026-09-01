@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: adnajja <adnajja@student.42belgium.be>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/08/04 22:49:24 by adnajja           #+#    #+#             */
-/*   Updated: 2026/08/19 18:56:30 by adnajja          ###   ########.fr       */
+/*   Created: 2026/09/01 16:40:40 by adnajja           #+#    #+#             */
+/*   Updated: 2026/09/01 16:40:43 by adnajja          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,19 @@ int	init_mlx(t_game *game)
 	if (game->mlx.addr == NULL)
 		return (print_error("Failed to get image data address"));
 	return (0);
+}
+
+void	free_mlx(t_game *game)
+{
+	if (game->mlx.mlx == NULL)
+		return ;
+	if (game->mlx.img)
+		mlx_destroy_image(game->mlx.mlx, game->mlx.img);
+	if (game->mlx.win)
+		mlx_destroy_window(game->mlx.mlx, game->mlx.win);
+	mlx_destroy_display(game->mlx.mlx);
+	free(game->mlx.mlx);
+	game->mlx.img = NULL;
+	game->mlx.win = NULL;
+	game->mlx.mlx = NULL;
 }

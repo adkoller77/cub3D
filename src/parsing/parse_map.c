@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_map.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adnajja <adnajja@student.42belgium.be>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/09/01 16:40:40 by adnajja           #+#    #+#             */
+/*   Updated: 2026/09/01 16:40:43 by adnajja          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 static int	pad_row(t_game *game, int i, int max_len)
@@ -74,26 +86,39 @@ static int	add_map_line(t_game *game, char *line)
 	return (0);
 }
 
+/* Returns 0 when line is stored in the grid (ownership taken),
+   1 when line was handled and freed, -1 on error (line freed). */
+static int	feed_line(t_game *game, char *line, int *map_ended)
+{
+	if (is_blank_line(line))
+	{
+		*map_ended = 1;
+		return (free(line), 1);
+	}
+	if (*map_ended)
+		return (free(line), print_error("Content after map"));
+	if (add_map_line(game, line) == -1)
+		return (free(line), print_error("Malloc failed"));
+	return (0);
+}
+
 int	parse_map(int fd, t_game *game, char *line)
 {
 	int	map_ended;
+	int	ret;
 
 	map_ended = 0;
-	while (line)
+	ret = 0;
+	while (line && ret >= 0)
 	{
-		if (is_blank_line(line))
-			map_ended = 1;
-		else if (map_ended)
-			return (free(line), close(fd), print_error("Content after map"));
-		else if (add_map_line(game, line) == -1)
-			return (free(line), close(fd), print_error("Malloc failed"));
-		else
-			line = NULL;
-		free(line);
-		line = get_next_line(fd);
+		ret = feed_line(game, line, &map_ended);
+		line = NULL;
+		if (ret >= 0)
+			line = get_next_line(fd);
 	}
+	flush_gnl(fd);
 	close(fd);
-	if (check_elements(game) == -1)
+	if (ret < 0 || check_elements(game) == -1)
 		return (-1);
 	return (pad_map(game));
 }

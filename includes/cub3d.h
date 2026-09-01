@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cub3d.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adnajja <adnajja@student.42belgium.be>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/09/01 16:40:40 by adnajja           #+#    #+#             */
+/*   Updated: 2026/09/01 16:40:43 by adnajja          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CUB3D_H
 # define CUB3D_H
 
@@ -106,6 +118,7 @@ void	dda(t_ray *ray, t_game *game);
 void	init_ray(t_ray *ray, t_game *game, int i);
 void	init_game(t_game *game);
 int		init_mlx(t_game *game);
+void	free_mlx(t_game *game);
 int		render(t_game *game);
 int		close_window(t_game *game);
 int		key_press(int keycode, t_game *game);
@@ -125,6 +138,7 @@ int		parse_rgb(char *line, int *color);
 int		parse_color(char *line, t_game *game, int is_floor);
 int		parse_texture(char *line, t_game *game, int index);
 int		read_cub(int fd, t_game *game);
+void	flush_gnl(int fd);
 int		validate_map(t_game *game);
 char	**copy_map(t_game *game);
 int		flood_fill(char **map, int i, int j, int size);
