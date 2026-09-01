@@ -21,13 +21,6 @@ static int	is_wall(t_game *game, double x, double y)
 	return (game->map.grid[(int)y][(int)x] == '1');
 }
 
-static double	collide_offset(double delta)
-{
-	if (delta > 0)
-		return (COLLISION_MARGIN);
-	return (-COLLISION_MARGIN);
-}
-
 static void	get_move_delta(t_game *game, char dir, double *dx, double *dy)
 {
 	*dx = 0;
@@ -60,13 +53,21 @@ void	move_player(t_game *game, char dir)
 	double	new_y;
 	double	dx;
 	double	dy;
+	double	margin_x;
+	double	margin_y;
 
 	get_move_delta(game, dir, &dx, &dy);
 	new_x = game->player.pos_x + dx;
 	new_y = game->player.pos_y + dy;
-	if (!is_wall(game, new_x + collide_offset(dx), game->player.pos_y))
+	margin_x = -COLLISION_MARGIN;
+	if (dx > 0)
+		margin_x = COLLISION_MARGIN;
+	margin_y = -COLLISION_MARGIN;
+	if (dy > 0)
+		margin_y = COLLISION_MARGIN;
+	if (!is_wall(game, new_x + margin_x, game->player.pos_y))
 		game->player.pos_x = new_x;
-	if (!is_wall(game, game->player.pos_x, new_y + collide_offset(dy)))
+	if (!is_wall(game, game->player.pos_x, new_y + margin_y))
 		game->player.pos_y = new_y;
 }
 
